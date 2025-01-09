@@ -1,0 +1,29 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      myCircuitBreaker:
+        registerHealthIndicator: true
+        failureRateThreshold: 50  # Define the failure rate threshold
+        waitDurationInOpenState: 5000ms  # Time to stay in open state before transitioning to half-open
+        slidingWindowSize: 10  # Sliding window size for counting failures
+        slidingWindowType: COUNT_BASED
+
+
+  retry:
+    instances:
+      userService:
+        maxRetryAttempts: 5
+        waitDuration: 10s
